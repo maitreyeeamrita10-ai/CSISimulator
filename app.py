@@ -44,20 +44,11 @@ def index():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        name = request.form['name'].strip()
-        email = request.form['email'].strip().lower()
-        password = request.form['password']
-        role = request.form.get('role', 'trainee')
-        cur = mysql.connection.cursor()
-        try:
-            cur.execute('INSERT INTO users(name,email,role,password_hash) VALUES(%s,%s,%s,%s)',
-                        (name, email, role, hash_password(password)))
-            mysql.connection.commit()
-            flash('Registration successful. Login now.', 'success')
-            return redirect(url_for('login'))
-        except Exception as e:
-            mysql.connection.rollback()
-            flash('Email already exists or database error.', 'danger')
+        session['user_id'] = 1
+        session['user_name'] = request.form['name'].strip()
+        flash('Registration successful. Demo mode enabled.', 'success')
+        return redirect(url_for('dashboard'))
+
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
