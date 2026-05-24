@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% block content %}
+<section class="auth hero-card">
+  <div><span class="badge">Join CSI Lab</span><h1>Create investigator account</h1><p>Your cases, evidence and verdict score are stored in MySQL.</p></div>
+  <form method="post" class="glass-form">
+    <h2>Register</h2>
+    <input name="name" placeholder="Full name" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <select name="role"><option value="trainee">Trainee</option><option value="investigator">Investigator</option><option value="admin">Admin</option></select>
+    <input name="password" type="password" placeholder="Password" required>
+    <button class="btn primary">Create Account</button>
+    <p>Already registered? <a href="{{ url_for('login') }}">Login</a></p>
+  </form>
+</section>
+{% endblock %}

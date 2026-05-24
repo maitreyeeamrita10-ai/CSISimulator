@@ -1,0 +1,97 @@
+{% extends 'base.html' %}{% block content %}
+<section class="page-head">
+  <div>
+    <span class="badge">Interactive Evidence Lab</span>
+    <h1>{{ case.title }}</h1>
+    <p>Collect evidence directly from the crime-scene photograph, examine every clue, upload FIR/files, and save forensic lab results.</p>
+  </div>
+  <a class="btn primary" href="{{ url_for('suspects', case_id=case.case_id) }}">Suspect Interview →</a>
+</section>
+
+<div class="lab-command">
+  <div class="command-card"><b>{{ hotspots|length }}</b><span>Total scene clues</span></div>
+  <div class="command-card"><b>{{ collected|length }}</b><span>Collected by you</span></div>
+  <div class="command-card"><b>{{ evidence|length }}</b><span>Evidence in vault</span></div>
+</div>
+
+<section class="lab-hero">
+  <div class="lab-scene-head">
+    <div>
+      <h2>Evidence Collection Board</h2>
+      <p>{{ scene.description }}</p>
+    </div>
+    <span class="scan-chip">Click glowing markers to collect</span>
+  </div>
+  <div class="scene-wrap lab-mode">
+    <img src="{{ scene.background_url }}" class="scene-img" alt="Crime scene evidence lab">
+    <div class="scan-grid"></div>
+    {% for h in hotspots %}
+    <form method="post" action="{{ url_for('collect', case_id=case.case_id, hotspot_id=h.hotspot_id) }}" class="hotspot" style="left:{{ h.x_pos }}%; top:{{ h.y_pos }}%;">
+      <input type="hidden" name="next" value="lab">
+      <button title="{{ h.label }}" class="hotspot-btn {% if h.hotspot_id in collected %}done{% endif %}" {% if h.hotspot_id in collected %}disabled{% endif %}>{{ h.icon }}</button>
+      <div class="tooltip">
+        <b>{{ h.label }}</b><br>
+        {{ h.clue_description }}<br>
+        <small>Type: {{ h.evidence_type }}</small>
+        {% if h.hotspot_id in collected %}<br><em>Already collected</em>{% endif %}
+        {% if h.is_red_herring %}<br><em>May be red herring</em>{% endif %}
+      </div>
+    </form>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="grid-two lab-panels">
+  <form class="panel upload-zone" method="post" enctype="multipart/form-data" action="{{ url_for('upload', case_id=case.case_id) }}">
+    <h2>Upload Real Evidence / FIR Copy</h2>
+    <p class="muted">Upload real-life photos, FIR copy, witness statement, or supporting document.</p>
+    <input type="file" name="file" required>
+    <textarea name="note" placeholder="Example: FIR copy collected from police station / CCTV screenshot / real evidence photo"></textarea>
+    <button class="btn primary">Upload to Evidence Vault</button>
+  </form>
+
+  <div class="panel checklist">
+    <h2>Investigation Checklist</h2>
+    <label><input type="checkbox"> Photograph the scene before collection</label>
+    <label><input type="checkbox"> Collect physical/digital/biological evidence</label>
+    <label><input type="checkbox"> Preserve chain of custody</label>
+    <label><input type="checkbox"> Perform lab tests</label>
+    <label><input type="checkbox"> Match evidence with suspect motive and alibi</label>
+  </div>
+</div>
+
+<section class="vault-section">
+  <div class="section-title">
+    <h2>Collected Evidence Vault</h2>
+    <p class="muted">Every collected item appears below with lab-result entry.</p>
+  </div>
+  <div class="evidence-grid vault-grid">
+  {% for e in evidence %}
+    <article class="evidence-card vault-card {% if e.is_red_herring %}red-herring{% endif %}">
+      <div class="evidence-photo">
+        <span>{{ e.icon or '📎' }}</span>
+      </div>
+      <div class="evidence-body">
+        <h3>{{ e.label or e.type }}</h3>
+        <p>{{ e.description }}</p>
+        <small>Type: {{ e.type }} | Collected: {{ e.collected_at }}</small>
+        {% if e.file_hash %}<small>Uploaded file saved as: {{ e.file_hash }}</small>{% endif %}
+        <form method="post" class="mini-form">
+          <input type="hidden" name="evidence_id" value="{{ e.evidence_id }}">
+          <input name="test_type" placeholder="Test type: DNA / Fingerprint / Toxicology / Digital">
+          <textarea name="lab_result" placeholder="Enter professional lab result">{{ e.lab_result }}</textarea>
+          <button class="btn">Save Lab Result</button>
+        </form>
+      </div>
+    </article>
+  {% else %}
+    <div class="panel"><h2>No evidence collected yet</h2><p>Use the large crime-scene image above and click the glowing markers.</p></div>
+  {% endfor %}
+  </div>
+</section>
+
+<div class="actions">
+  <a class="btn" href="{{ url_for('crime_scene', case_id=case.case_id) }}">← Crime Scene</a>
+  <a class="btn primary" href="{{ url_for('suspects', case_id=case.case_id) }}">Continue to Suspects</a>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Case Closed - CSI Simulator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="closed-body">
+
+<div class="closed-container">
+    <h1>CASE CLOSED</h1>
+    <h2>Investigation Completed Successfully</h2>
+
+    <p>
+        The investigation report has been generated and the case details
+        have been recorded in the CSI Simulator system.
+    </p>
+
+    <div class="closed-card">
+        <h3>{{ case.title }}</h3>
+        <p><b>Crime Type:</b> {{ case.crime_type }}</p>
+        <p><b>Location:</b> {{ case.location }}</p>
+        <p><b>Status:</b> Closed</p>
+    </div>
+
+    <a href="{{ url_for('dashboard') }}" class="welcome-btn">Go to Dashboard</a>
+</div>
+
+</body>
+</html>

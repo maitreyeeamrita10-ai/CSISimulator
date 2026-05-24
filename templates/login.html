@@ -1,0 +1,16 @@
+{% extends 'base.html' %}{% block content %}
+<section class="auth hero-card">
+  <div>
+    <span class="badge">Forensic Training Web App</span>
+    <h1>Login to begin investigation</h1>
+    <p>Collect hidden evidence, run lab tests, interview suspects, submit a verdict, and generate a professional PDF report.</p>
+  </div>
+  <form method="post" class="glass-form">
+    <h2>Investigator Login</h2>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="password" type="password" placeholder="Password" required>
+    <button class="btn primary">Login</button>
+    <p>New user? <a href="{{ url_for('register') }}">Create account</a></p>
+  </form>
+</section>
+{% endblock %}

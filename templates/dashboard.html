@@ -1,0 +1,16 @@
+{% extends 'base.html' %}{% block content %}
+<section class="page-head">
+  <div><span class="badge">Command Center</span><h1>Welcome, {{ user.name }}</h1><p>Follow the workflow: Case → Crime Scene → Evidence Lab → Suspects → Verdict → PDF Report.</p></div>
+  <a class="btn primary" href="{{ url_for('case_list') }}">Open Cases</a>
+</section>
+<div class="stats">
+  <div class="stat"><b>{{ total_cases }}</b><span>Total Cases</span></div>
+  <div class="stat"><b>{{ evidence_count }}</b><span>Evidence Collected</span></div>
+  <div class="stat"><b>{{ verdict_count }}</b><span>Verdicts Submitted</span></div>
+</div>
+<div class="workflow">
+  {% for step in ['Create/Open Case','Collect Evidence','Run Lab Tests','Interview Suspects','Submit Verdict','Generate PDF'] %}
+  <div class="flow-card"><span>{{ loop.index }}</span><p>{{ step }}</p></div>
+  {% endfor %}
+</div>
+{% endblock %}

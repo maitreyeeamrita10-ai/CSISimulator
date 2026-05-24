@@ -1,0 +1,23 @@
+{% extends 'base.html' %}{% block content %}
+<section class="page-head"><div><span class="badge">Final Verdict</span><h1>{{ case.title }}</h1><p>Select the accused, justify with evidence, then download report.</p></div></section>
+<div class="grid-two">
+  <form method="post" class="panel">
+    <h2>Submit Verdict</h2>
+    <select name="accused_suspect_id" required>{% for s in suspects %}<option value="{{ s.suspect_id }}">{{ s.name }} - {{ s.occupation }}</option>{% endfor %}</select>
+    <textarea name="reasoning" placeholder="Explain your reasoning with evidence, motive, alibi contradiction and lab results." required></textarea>
+    <button class="btn primary">Submit Verdict</button>
+  </form>
+  <div class="panel result-box">
+    <h2>Result</h2>
+    {% if result %}<div class="score">{{ result.score }}/100</div><p>{{ 'Correct verdict ' if result.is_correct else 'Incorrect verdict ' }}</p>{% elif last_verdict %}<div class="score">{{ last_verdict.score }}/100</div><p>Last accused: {{ last_verdict.accused_name }}</p>{% else %}<p>No verdict submitted yet.</p>{% endif %}
+    <a class="btn primary full" href="{{ url_for('report', case_id=case.case_id) }}">Download PDF Report</a>
+    <br>
+    
+
+<a href="{{ url_for('case_closed', case_id=case.case_id) }}" class="btn">
+    Close Case
+</a>
+  </div>
+</div>
+<div class="actions"><a class="btn" href="{{ url_for('suspects', case_id=case.case_id) }}">← Suspects</a></div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}{% block content %}
+<section class="page-head"><div><span class="badge">Suspect Room</span><h1>{{ case.title }}</h1><p>Study alibi, motive and interview notes before final verdict.</p></div><a class="btn" href="{{ url_for('verdict', case_id=case.case_id) }}">Verdict →</a></section>
+<div class="suspect-grid">
+{% for s in suspects %}
+  <article class="suspect-card"><h3>{{ s.name }}</h3><p><b>Age:</b> {{ s.age }} | <b>Job:</b> {{ s.occupation }}</p><p><b>Alibi:</b> {{ s.alibi }}</p><p><b>Motive:</b> {{ s.motive }}</p>
+    <form method="post"><input type="hidden" name="suspect_id" value="{{ s.suspect_id }}"><select name="question_style"><option value="neutral">Neutral interview</option><option value="pressure">Pressure questioning</option><option value="evidence-based">Evidence-based questioning</option></select><button class="btn">Interview</button></form>
+  </article>
+{% endfor %}
+</div>
+{% if interview %}<div class="panel highlight"><h2>Interview Result</h2><p>{{ interview }}</p></div>{% endif %}
+<div class="actions"><a class="btn" href="{{ url_for('evidence_lab', case_id=case.case_id) }}">← Evidence Lab</a><a class="btn primary" href="{{ url_for('verdict', case_id=case.case_id) }}">Proceed to Verdict</a></div>
+{% endblock %}

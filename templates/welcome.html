@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome - CSI Simulator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="welcome-body">
+
+<div class="welcome-container">
+    <h1>CSI SIMULATOR</h1>
+    <h2>Crime Scene Investigation & Evidence Analysis System</h2>
+
+    <p>
+        Enter the digital forensic investigation environment where you can
+        solve cases, collect evidence, analyze suspects, submit verdicts,
+        and generate investigation reports.
+    </p>
+
+    <a href="{{ url_for('login') }}" class="welcome-btn">Start Investigation</a>
+</div>
+
+</body>
+</html>

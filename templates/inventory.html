@@ -1,0 +1,27 @@
+{% extends 'base.html' %}{% block content %}
+<section class="page-head"><div><span class="badge">Evidence Lab</span><h1>{{ case.title }}</h1><p>Review collected evidence, update lab results, upload real-life FIR/images/documents.</p></div><a class="btn" href="{{ url_for('suspects', case_id=case.case_id) }}">Suspects →</a></section>
+<div class="grid-two">
+  <form class="panel" method="post" enctype="multipart/form-data" action="{{ url_for('upload', case_id=case.case_id) }}">
+    <h2>Upload Field File / FIR Copy</h2>
+    <input type="file" name="file" required>
+    <textarea name="note" placeholder="Short note about uploaded file"></textarea>
+    <button class="btn primary">Upload</button>
+  </form>
+  <div class="panel"><h2>Collected Count</h2><div class="big-number">{{ evidence|length }}</div><p class="muted">Collect more evidence from the crime scene for better score.</p></div>
+</div>
+<div class="evidence-grid">
+{% for e in evidence %}
+  <article class="evidence-card">
+    <div class="ev-icon">{{ e.icon or '📎' }}</div><h3>{{ e.label or e.type }}</h3><p>{{ e.description }}</p>
+    <small>Type: {{ e.type }} | Collected: {{ e.collected_at }}</small>
+    <form method="post" class="mini-form">
+      <input type="hidden" name="evidence_id" value="{{ e.evidence_id }}">
+      <input name="test_type" placeholder="Test type e.g. DNA, fingerprint">
+      <textarea name="lab_result" placeholder="Lab result">{{ e.lab_result }}</textarea>
+      <button class="btn">Save Lab Result</button>
+    </form>
+  </article>
+{% else %}<div class="panel"><h2>No evidence yet</h2><p>Go back to the crime scene and click hotspots.</p></div>{% endfor %}
+</div>
+<div class="actions"><a class="btn" href="{{ url_for('crime_scene', case_id=case.case_id) }}">← Crime Scene</a><a class="btn primary" href="{{ url_for('suspects', case_id=case.case_id) }}">Interview Suspects</a></div>
+{% endblock %}

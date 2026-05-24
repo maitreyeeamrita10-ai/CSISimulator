@@ -1,0 +1,13 @@
+{% extends 'base.html' %}{% block content %}
+<section class="page-head"><div><span class="badge">Crime Scene</span><h1>{{ case.title }}</h1><p>{{ scene.description }}</p></div><a class="btn" href="{{ url_for('evidence_lab', case_id=case.case_id) }}">Evidence Lab →</a></section>
+<div class="scene-wrap">
+  <img src="{{ scene.background_url }}" class="scene-img" alt="Crime scene">
+  {% for h in hotspots %}
+  <form method="post" action="{{ url_for('collect', case_id=case.case_id, hotspot_id=h.hotspot_id) }}" class="hotspot" style="left:{{ h.x_pos }}%; top:{{ h.y_pos }}%;">
+    <button title="{{ h.label }}" class="hotspot-btn {% if h.hotspot_id in collected %}done{% endif %}">{{ h.icon }}</button>
+    <div class="tooltip"><b>{{ h.label }}</b><br>{{ h.clue_description }}{% if h.is_red_herring %}<br><em>Possible red herring</em>{% endif %}</div>
+  </form>
+  {% endfor %}
+</div>
+<div class="actions"><a class="btn" href="{{ url_for('case_list') }}">← Cases</a><a class="btn primary" href="{{ url_for('evidence_lab', case_id=case.case_id) }}">Go to Evidence Lab</a></div>
+{% endblock %}

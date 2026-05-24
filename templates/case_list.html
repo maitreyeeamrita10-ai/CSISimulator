@@ -1,0 +1,27 @@
+{% extends 'base.html' %}{% block content %}
+<section class="page-head"><div><span class="badge">Case Registry</span><h1>Available Cases</h1><p>Use seeded database cases or create your own custom case.</p></div></section>
+<div class="grid-two">
+  <form method="post" class="panel">
+    <h2>Create New Case</h2>
+    <input name="title" placeholder="Case title" required>
+    <input name="crime_type" placeholder="Crime type" required>
+    <input name="location" placeholder="Location" required>
+    <input name="date_of_crime" type="date" required>
+    <select name="difficulty"><option>easy</option><option>medium</option><option>hard</option></select>
+    <input name="background_url" placeholder="Optional scene image URL">
+    <textarea name="description" placeholder="Case description" required></textarea>
+    <button class="btn primary">Add Case</button>
+  </form>
+  <div class="panel"><h2>Search Cases</h2><form><input name="q" value="{{ q }}" placeholder="Search by title, crime, location"><button class="btn">Search</button></form><p class="muted">Tip: open a case card to start investigation.</p></div>
+</div>
+<div class="case-grid">
+  {% for c in cases %}
+  <article class="case-card">
+    <div class="case-top"><span class="pill {{ c.difficulty }}">{{ c.difficulty }}</span><span>{{ c.status }}</span></div>
+    <h3>{{ c.title }}</h3><p>{{ c.description[:145] }}...</p>
+    <div class="meta">📍 {{ c.location }}<br>🔎 {{ c.crime_type }} | {{ c.date_of_crime }}</div>
+    <a class="btn primary full" href="{{ url_for('crime_scene', case_id=c.case_id) }}">Open Investigation</a>
+  </article>
+  {% endfor %}
+</div>
+{% endblock %}
